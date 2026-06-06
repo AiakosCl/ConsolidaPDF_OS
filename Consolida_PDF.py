@@ -6,8 +6,6 @@ import platform
 import subprocess
 
 def seleccionar_pdfs():
-    root = tk.Tk()
-    root.withdraw()
     archivos_pdf = filedialog.askopenfilenames(
         title="Selecciona los archivos PDF en el orden deseado",
         filetypes=[("Archivos PDF", "*.pdf")]
@@ -50,17 +48,24 @@ def consolidar_pdfs(archivos, nombre_salida):
         messagebox.showerror("Error durante la fusión", f"Ocurrió un error:\n\n{e}")
 
 if __name__ == "__main__":
-    archivos = seleccionar_pdfs()
-    if archivos:
-        output_path = filedialog.asksaveasfilename(
-            defaultextension=".pdf",
-            filetypes=[("Archivo PDF", "*.pdf")],
-            title="Guardar PDF consolidado como"
-        )
-        if output_path:
-            consolidar_pdfs(archivos, output_path)
-    else:
-        messagebox.showinfo("Sin selección", "No se seleccionaron archivos PDF.")
+    root = tk.Tk()
+    root.withdraw()
+    while True:
+        archivos = seleccionar_pdfs()
+        if archivos:
+            output_path = filedialog.asksaveasfilename(
+                defaultextension=".pdf",
+                filetypes=[("Archivo PDF", "*.pdf")],
+                title="Guardar PDF consolidado como"
+            )
+            if output_path:
+                consolidar_pdfs(archivos, output_path)
+        else:
+            messagebox.showinfo("Sin selección", "No se seleccionaron archivos PDF.")
+            
+        continuar = messagebox.askyesno("Continuar", "¿Deseas fusionar otros archivos PDF?")
+        if not continuar:
+            break
 
 # Este script permite al usuario seleccionar múltiples archivos PDF,
 # los fusiona en un solo archivo PDF y guarda el resultado en una ubicación especificada.
